@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+
+  console-api:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: ./build/Dockerfile
+    container_name: kubefirst-api
+    ports:
+      - "3000:3000"
