@@ -1,8 +1,7 @@
 package main
 
 import (
-	"github.com/gorilla/mux"
-	"github.com/kubefirst/console-api/internal/handlers"
+	sw "github.com/kubefirst/console-api/internal/api"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"net/http"
@@ -15,16 +14,13 @@ func main() {
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout}).With().Caller().Logger()
 
 	// mux router
-	r := mux.NewRouter().StrictSlash(true)
-	r.Use(mux.CORSMethodMiddleware(r))
 
-	appHandler := handlers.NewApp()
-
-	r.HandleFunc("/healthz", appHandler.Healthz).Methods(http.MethodGet, http.MethodOptions)
+	log.Printf("Console API started")
+	router := sw.NewRouter()
 
 	port := ":3000"
 	log.Info().Msgf("API listening at %q port", port[1:])
-	if err := http.ListenAndServe(port, r); err != nil {
+	if err := http.ListenAndServe(port, router); err != nil {
 		log.Panic().Err(err).Msg("API is down")
 	}
 }
