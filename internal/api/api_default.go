@@ -10,7 +10,12 @@ package swagger
 
 import (
 	"encoding/json"
+	"github.com/kubefirst/console-api/internal/domain"
+	"github.com/kubefirst/console-api/internal/handlers"
+	"github.com/kubefirst/console-api/internal/services"
+	"github.com/kubefirst/console-api/pkg"
 	"github.com/rs/zerolog/log"
+	"github.com/segmentio/analytics-go"
 
 	"net/http"
 )
@@ -22,10 +27,40 @@ func HealthzGet(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	log.Debug().Msg("I'm health!")
 
+	// Instantiates a SegmentIO client to use send messages to the segment API.
+	segmentIOClient := analytics.New(pkg.SegmentIOWriteKey)
+
+	// SegmentIO library works with queue that is based on timing, we explicit close the http client connection
+	// to force flush in case there is still some pending message in the SegmentIO library queue.
+	defer func(segmentIOClient analytics.Client) {
+		err := segmentIOClient.Close()
+		if err != nil {
+			log.Error().Err(err).Msg("")
+		}
+	}(segmentIOClient)
+
+	// validate telemetryDomain data
+	telemetryDomain, err := domain.NewTelemetry(
+		"some name here",
+		awsFlags.HostedZoneName, // todo:
+		configs.K1Version,       // todo:
+	)
+	if err != nil {
+		log.Error().Err(err).Msg("")
+
+	}
+	telemetryService := services.NewSegmentIoService(segmentIOClient)
+	telemetryHandler := handlers.NewTelemetryHandler(telemetryService)
+
+	err = telemetryHandler.SendCountMetric(telemetryDomain)
+	if err != nil {
+		log.Error().Err(err).Msg("")
+	}
+
 	jsonData, err := json.Marshal(true)
 	if err != nil {
 		w.WriteHeader(http.StatusOK)
-		log.Printf("Error")
+		log.Error().Err(err).Msg("")
 		return
 	}
 
@@ -33,7 +68,7 @@ func HealthzGet(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		w.WriteHeader(http.StatusOK)
-		log.Printf("Error")
+		log.Error().Err(err).Msg("")
 		return
 	}
 }
