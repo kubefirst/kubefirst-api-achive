@@ -1,0 +1,15 @@
+openapi: 3.0.3
+info:
+  title: Kubefirst API
+  description: Kubefirst API to serve console
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /healthz:
+    get:
+      summary: Health endpoint checks app availability.
+      responses:
+        "200":
+          description: It will return 200/ok when app is up and running.
+components: {}
