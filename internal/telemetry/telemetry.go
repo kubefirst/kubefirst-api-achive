@@ -26,7 +26,7 @@ func SendMetric(metricName string) error {
 	telemetryDomain, err := domain.NewTelemetry(
 		metricName,
 		"gh.mgmt.kubefirst.com", // ToDo: Detokenize
-		"1.9.9", // ToDo
+		"1.9.9", // ToDo: Detokenize
 	)
 	if err != nil {
 		log.Error().Err(err).Msg("An error occurred while creating new telemetry data")
