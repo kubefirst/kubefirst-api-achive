@@ -4,6 +4,7 @@ import (
 	"github.com/kubefirst/console-api/internal/domain"
 	"github.com/kubefirst/console-api/internal/handlers"
 	"github.com/kubefirst/console-api/internal/services"
+	"github.com/kubefirst/console-api/configs"
 	"github.com/kubefirst/console-api/pkg"
 	"github.com/rs/zerolog/log"
 	"github.com/segmentio/analytics-go"
@@ -12,6 +13,9 @@ import (
 func SendMetric(metricName string) error {
 	// Instantiates a SegmentIO client to use send messages to the segment API.
 	segmentIOClient := analytics.New(pkg.SegmentIOWriteKey)
+	config := configs.ReadConfig()
+	log.Debug().Msg(config.KubefirstVersion)
+	log.Debug().Msg(config.HostedZoneName)
 
 	// SegmentIO library works with queue that is based on timing, we explicit close the http client connection
 	// to force flush in case there is still some pending message in the SegmentIO library queue.
@@ -25,8 +29,8 @@ func SendMetric(metricName string) error {
 	// validate telemetryDomain data
 	telemetryDomain, err := domain.NewTelemetry(
 		metricName,
-		"gh.mgmt.kubefirst.com", // ToDo: Detokenize
-		"1.9.9", // ToDo: Detokenize
+		config.HostedZoneName,
+		config.KubefirstVersion,
 	)
 	if err != nil {
 		log.Error().Err(err).Msg("An error occurred while creating new telemetry data")
