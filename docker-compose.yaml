@@ -8,5 +8,8 @@ services:
       context: .
       dockerfile: ./build/Dockerfile
     container_name: kubefirst-api
+    environment:
+      KUBEFIRST_VERSION: 1.9.9
+      HOSTED_ZONE_NAME: gh.mgmt.kubefirst.com
     ports:
       - "3000:3000"
