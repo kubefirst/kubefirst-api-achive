@@ -22,7 +22,7 @@ func HealthzGet(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	w.WriteHeader(http.StatusOK)
-	log.Debug().Msg("I'm health!")
+	log.Debug().Msg("I'm healthy!")
 
 	err := telemetry.SendMetric(pkg.MetricHealth)
 
