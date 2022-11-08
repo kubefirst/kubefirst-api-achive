@@ -30,4 +30,13 @@ func HealthzGet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_, err = w.Write(jsonData)
+
+	if err != nil {
+		jsonData, err := json.Marshal(true)
+		w.WriteHeader(http.StatusOK)
+		w.Write(jsonData)
+
+		log.Error().Err(err).Msg("An error occurred while writing response")
+		return
+	}
 }
