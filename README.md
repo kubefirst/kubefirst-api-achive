@@ -13,3 +13,8 @@ Kubefirst API that serves console frontend
 1. Build the docker image: `docker build -f build/Dockerfile --tag public.ecr.aws/kubefirst/api:{version} .`
 2. Log in `aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/kubefirst`
 3. Push Image: `docker push public.ecr.aws/kubefirst/api:{version}`
+4. Go to the [API Chart](https://github.com/kubefirst/charts/tree/gh-pages/charts/api) and bump up the docker version and chart version. Follow the [README](https://github.com/kubefirst/charts) instructions.
+
+### Chart
+
+1. The Api chart is stored in the [Charts repository](https://github.com/kubefirst/charts)
