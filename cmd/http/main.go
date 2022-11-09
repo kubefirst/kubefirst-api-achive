@@ -1,11 +1,14 @@
 package main
 
 import (
-	sw "github.com/kubefirst/console-api/internal/api"
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"net/http"
 	"os"
+	
+	sw "github.com/kubefirst/console-api/internal/api"
+	"github.com/kubefirst/console-api/internal/telemetry"
+	"github.com/kubefirst/console-api/pkg"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 )
 
 func main() {
@@ -13,9 +16,14 @@ func main() {
 	zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stdout}).With().Caller().Logger()
 
-	// mux router
+	err := telemetry.SendMetric(pkg.MetricHealth)
 
-	log.Printf("Console API started")
+	if err != nil {
+		log.Error().Err(err).Msg("An error occurred while sending telemetry metric")
+		return
+	}
+
+	log.Printf("Kubefirst API started")
 	router := sw.NewRouter()
 
 	port := ":3000"

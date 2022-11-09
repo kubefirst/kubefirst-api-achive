@@ -10,8 +10,6 @@ package swagger
 
 import (
 	"encoding/json"
-	"github.com/kubefirst/console-api/internal/telemetry"
-	"github.com/kubefirst/console-api/pkg"
 	"github.com/rs/zerolog/log"
 
 	"net/http"
@@ -24,23 +22,9 @@ func HealthzGet(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	log.Debug().Msg("I'm healthy!")
 
-	err := telemetry.SendMetric(pkg.MetricHealth)
-
-	if err != nil {
-		jsonData, err := json.Marshal(true)
-		w.WriteHeader(http.StatusOK)
-		w.Write(jsonData)
-		
-		log.Error().Err(err).Msg("An error occurred while sending telemetry metric")
-		return
-	}
-
 	jsonData, err := json.Marshal(true)
 	if err != nil {
-		jsonData, err := json.Marshal(true)
-		w.WriteHeader(http.StatusOK)
 		w.Write(jsonData)
-		
 		log.Error().Err(err).Msg("An error occurred while parsing response")
 		return
 	}
