@@ -16,7 +16,7 @@ Kubefirst API that serves console frontend
 
 ### Push Docker Image to ECR
 
-Note: You might need an AWS Managament Account
+Note: You might need an AWS Management Account
 
 1. Retrieve an authentication token and authenticate your Docker client to your registry.
    `aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/kubefirst`
