@@ -25,18 +25,19 @@ func NewTelemetry(metricName string, domain string, CLIVersion string) (Telemetr
 		return Telemetry{}, errors.New("unable to create metric, missing metric name")
 	}
 
+	// scan for kubefirst_team env
+	kubeFirstTeam := "false"
+	if os.Getenv("kubefirst_team") == "true" {
+		kubeFirstTeam = "true"
+	}
+
 	// localhost installation doesn't provide hostedzone that are mainly used as domain in this context. In case a
 	// hostedzone is not provided, we assume it's a localhost installation
-	kubeFirstTeam := "false"
 	if len(domain) == 0 {
-		uniqueUserId := uuid.New()
-		domain = uniqueUserId.String()
-		if os.Getenv("kubefirst_team") == "true" {
-			kubeFirstTeam = "true"
-		}
+		clusterId := uuid.New().String()
 		return Telemetry{
 			MetricName:    metricName,
-			Domain:        domain,
+			Domain:        clusterId,
 			CLIVersion:    CLIVersion,
 			KubeFirstTeam: kubeFirstTeam,
 			ClusterType:   "mgmt",
