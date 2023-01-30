@@ -25,9 +25,9 @@ func (service SegmentIoService) EnqueueCountMetric(metricName string, domain str
 		Event:  metricName,
 		Properties: analytics.NewProperties().
 			Set("domain", domain).
-			Set("cli_version", cliVersion),
-			Set("kubefirst_team", kubeFirstTeam)
-			Set("cluster_type", clusterType)
+			Set("cli_version", cliVersion).
+			Set("kubefirst_team", kubeFirstTeam).
+			Set("cluster_type", clusterType),
 	})
 	if err != nil {
 		return err
