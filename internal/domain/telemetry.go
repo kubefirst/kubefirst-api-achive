@@ -14,6 +14,7 @@ type Telemetry struct {
 	Domain        string
 	CLIVersion    string
 	ClusterType   string
+	ClusterId     string
 	KubeFirstTeam string
 }
 
@@ -30,17 +31,20 @@ func NewTelemetry(metricName string, domain string, CLIVersion string) (Telemetr
 	if os.Getenv("kubefirst_team") == "true" {
 		kubeFirstTeam = "true"
 	}
+	//initialize cluster id
+	clusterId := uuid.New().String()
 
 	// localhost installation doesn't provide hostedzone that are mainly used as domain in this context. In case a
 	// hostedzone is not provided, we assume it's a localhost installation
 	if len(domain) == 0 {
-		clusterId := uuid.New().String()
+
 		return Telemetry{
 			MetricName:    metricName,
 			Domain:        clusterId,
 			CLIVersion:    CLIVersion,
 			KubeFirstTeam: kubeFirstTeam,
 			ClusterType:   "mgmt",
+			ClusterId:     clusterId,
 		}, nil
 	}
 
@@ -55,5 +59,6 @@ func NewTelemetry(metricName string, domain string, CLIVersion string) (Telemetr
 		CLIVersion:    CLIVersion,
 		KubeFirstTeam: kubeFirstTeam,
 		ClusterType:   "mgmt",
+		ClusterId:     clusterId,
 	}, nil
 }
