@@ -24,6 +24,7 @@ func (handler TelemetryHandler) SendCountMetric(telemetry domain.Telemetry) erro
 		telemetry.MetricName,
 		telemetry.Domain,
 		telemetry.CLIVersion,
+		telemetry.KubeFirstTeam
 	)
 	if err != nil {
 		return err
