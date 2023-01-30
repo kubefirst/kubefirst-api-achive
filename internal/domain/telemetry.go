@@ -11,6 +11,7 @@ type Telemetry struct {
 	MetricName string
 	Domain     string
 	CLIVersion string
+	KubeFirstTeam  bool
 }
 
 // NewTelemetry is the Telemetry domain. When instantiating new Telemetries, we're able to validate domain specific
@@ -28,11 +29,15 @@ func NewTelemetry(metricName string, domain string, CLIVersion string) (Telemetr
 		if err != nil {
 			return Telemetry{}, err
 		}
-		domain = unqiueUserId
+		domain = uniqueUserId
+		if os.GetEnv("kubefirst_team") = "true" {
+			kubeFirstTeam = true
+		}
 		return Telemetry{
 			MetricName: metricName,
 			Domain:     domain,
 			CLIVersion: CLIVersion,
+			KubeFirstTeam: kubeFirstTeam,
 		}, nil
 	}
 
@@ -45,5 +50,6 @@ func NewTelemetry(metricName string, domain string, CLIVersion string) (Telemetr
 		MetricName: metricName,
 		Domain:     domain,
 		CLIVersion: CLIVersion,
+		KubeFirstTeam: kubeFirstTeam
 	}, nil
 }
