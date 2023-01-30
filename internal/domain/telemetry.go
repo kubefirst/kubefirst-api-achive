@@ -8,9 +8,10 @@ import (
 
 // Telemetry data that will be consumed by handlers and services
 type Telemetry struct {
-	MetricName string
-	Domain     string
-	CLIVersion string
+	MetricName     string
+	Domain         string
+	CLIVersion     string
+	ClusterType    string
 	KubeFirstTeam  bool
 }
 
@@ -38,6 +39,7 @@ func NewTelemetry(metricName string, domain string, CLIVersion string) (Telemetr
 			Domain:     domain,
 			CLIVersion: CLIVersion,
 			KubeFirstTeam: kubeFirstTeam,
+			ClusterType: "mgmt"
 		}, nil
 	}
 
@@ -51,5 +53,6 @@ func NewTelemetry(metricName string, domain string, CLIVersion string) (Telemetr
 		Domain:     domain,
 		CLIVersion: CLIVersion,
 		KubeFirstTeam: kubeFirstTeam
+		ClusterType: "mgmt"
 	}, nil
 }

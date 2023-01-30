@@ -14,7 +14,6 @@ func SendMetric(metricName string) error {
 	// Instantiates a SegmentIO client to use send messages to the segment API.
 	segmentIOClient := analytics.New(pkg.SegmentIOWriteKey)
 	config := configs.ReadConfig()
-	log.Debug().Msg(config.KubefirstVersion)
 	log.Debug().Msg(config.HostedZoneName)
 
 	// SegmentIO library works with queue that is based on timing, we explicit close the http client connection
@@ -30,7 +29,6 @@ func SendMetric(metricName string) error {
 	telemetryDomain, err := domain.NewTelemetry(
 		metricName,
 		config.HostedZoneName,
-		config.KubefirstVersion,
 	)
 	if err != nil {
 		log.Error().Err(err).Msg("An error occurred while creating new telemetry data")

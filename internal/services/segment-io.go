@@ -17,7 +17,7 @@ func NewSegmentIoService(segmentIoClient analytics.Client) SegmentIoService {
 }
 
 // EnqueueCountMetric use the service SegmentIO client that also has a http client to communicate with SegmentIO API.
-func (service SegmentIoService) EnqueueCountMetric(metricName string, domain string, cliVersion string, kubeFirstTeam) error {
+func (service SegmentIoService) EnqueueCountMetric(metricName string, domain string, cliVersion string, kubeFirstTeam string, clusterType string) error {
 
 	// Enqueues a track event that will be sent asynchronously.
 	err := service.SegmentIOClient.Enqueue(analytics.Track{
@@ -26,7 +26,8 @@ func (service SegmentIoService) EnqueueCountMetric(metricName string, domain str
 		Properties: analytics.NewProperties().
 			Set("domain", domain).
 			Set("cli_version", cliVersion),
-			Set("kubefirst_team", KubeFirstTeam)
+			Set("kubefirst_team", kubeFirstTeam)
+			Set("cluster_type", clusterType)
 	})
 	if err != nil {
 		return err
