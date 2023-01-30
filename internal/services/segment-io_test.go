@@ -1,9 +1,10 @@
 package services
 
 import (
-	"github.com/kubefirst/kubefirst/pkg"
 	"reflect"
 	"testing"
+
+	"github.com/kubefirst/kubefirst/pkg"
 )
 
 func TestNewSegmentIoService(t *testing.T) {
@@ -37,9 +38,12 @@ func TestSegmentIoService_SendCountMetric(t *testing.T) {
 	segmentIOMock := pkg.SegmentIOMock{}
 
 	type args struct {
-		metricName string
-		domain     string
-		cliVersion string
+		metricName    string
+		domain        string
+		cliVersion    string
+		kubeFirstTeam string
+		clusterId     string
+		clusterType   string
 	}
 	tests := []struct {
 		name    string
@@ -65,7 +69,7 @@ func TestSegmentIoService_SendCountMetric(t *testing.T) {
 			service := SegmentIoService{
 				SegmentIOClient: tt.service.SegmentIOClient,
 			}
-			if err := service.EnqueueCountMetric(tt.args.metricName, tt.args.domain, tt.args.cliVersion); (err != nil) != tt.wantErr {
+			if err := service.EnqueueCountMetric(tt.args.metricName, tt.args.domain, tt.args.cliVersion, tt.args.kubeFirstTeam, tt.args.clusterId, tt.args.clusterType); (err != nil) != tt.wantErr {
 				t.Errorf("EnqueueCountMetric() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
