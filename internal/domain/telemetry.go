@@ -2,15 +2,20 @@ package domain
 
 import (
 	"errors"
-	"github.com/denisbrodbeck/machineid"
+	"os"
+
+	"github.com/google/uuid"
 	"github.com/kubefirst/console-api/pkg"
 )
 
 // Telemetry data that will be consumed by handlers and services
 type Telemetry struct {
-	MetricName string
-	Domain     string
-	CLIVersion string
+	MetricName    string
+	Domain        string
+	CLIVersion    string
+	ClusterType   string
+	ClusterId     string
+	KubeFirstTeam string
 }
 
 // NewTelemetry is the Telemetry domain. When instantiating new Telemetries, we're able to validate domain specific
@@ -21,18 +26,25 @@ func NewTelemetry(metricName string, domain string, CLIVersion string) (Telemetr
 		return Telemetry{}, errors.New("unable to create metric, missing metric name")
 	}
 
+	// scan for kubefirst_team env
+	kubeFirstTeam := "false"
+	if os.Getenv("kubefirst_team") == "true" {
+		kubeFirstTeam = "true"
+	}
+	//initialize cluster id
+	clusterId := uuid.New().String()
+
 	// localhost installation doesn't provide hostedzone that are mainly used as domain in this context. In case a
 	// hostedzone is not provided, we assume it's a localhost installation
 	if len(domain) == 0 {
-		machineId, err := machineid.ID()
-		if err != nil {
-			return Telemetry{}, err
-		}
-		domain = machineId
+
 		return Telemetry{
-			MetricName: metricName,
-			Domain:     domain,
-			CLIVersion: CLIVersion,
+			MetricName:    metricName,
+			Domain:        clusterId,
+			CLIVersion:    CLIVersion,
+			KubeFirstTeam: kubeFirstTeam,
+			ClusterType:   "mgmt",
+			ClusterId:     clusterId,
 		}, nil
 	}
 
@@ -42,8 +54,11 @@ func NewTelemetry(metricName string, domain string, CLIVersion string) (Telemetr
 	}
 
 	return Telemetry{
-		MetricName: metricName,
-		Domain:     domain,
-		CLIVersion: CLIVersion,
+		MetricName:    metricName,
+		Domain:        domain,
+		CLIVersion:    CLIVersion,
+		KubeFirstTeam: kubeFirstTeam,
+		ClusterType:   "mgmt",
+		ClusterId:     clusterId,
 	}, nil
 }

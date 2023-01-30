@@ -1,10 +1,10 @@
-package telemetry 
+package telemetry
 
 import (
+	"github.com/kubefirst/console-api/configs"
 	"github.com/kubefirst/console-api/internal/domain"
 	"github.com/kubefirst/console-api/internal/handlers"
 	"github.com/kubefirst/console-api/internal/services"
-	"github.com/kubefirst/console-api/configs"
 	"github.com/kubefirst/console-api/pkg"
 	"github.com/rs/zerolog/log"
 	"github.com/segmentio/analytics-go"
