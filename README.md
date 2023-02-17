@@ -1,3 +1,5 @@
+# NOTE: this repository is archived in favor of a v2 api
+
 # kubefirst-api
 
 Kubefirst API that serves console frontend
